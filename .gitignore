@@ -1,0 +1,10 @@
+# PlatformIO
+.pio/
+.vscode/
+
+# KiCad
+*.kicad_prl
+*-backups/
+fp-info-cache
+*.lck
+hardware/production/gerber/

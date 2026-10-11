@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LED-Herz Vorschau</title>
+<style>
+  :root { --bg: #0d0b10; --fg: #eee; --muted: #9a93a6; --btn: #241f2b; --btn-on: #c2185b; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.4 system-ui, sans-serif;
+         display: flex; flex-direction: column; align-items: center; padding: 16px; }
+  h1 { font-size: 20px; margin: 4px 0 2px; }
+  p { color: var(--muted); margin: 0 0 12px; text-align: center; }
+  canvas { width: min(92vw, 520px); height: auto; }
+  .btns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 560px; margin-top: 12px; }
+  button { background: var(--btn); color: var(--fg); border: 0; border-radius: 8px; padding: 8px 12px; font: inherit; cursor: pointer; }
+  button.on { background: var(--btn-on); }
+</style>
+</head>
+<body>
+<h1>LED-Herz – Vorschau</h1>
+<p>Die gleichen Effekte wie in der Firmware (src/effects.cpp), simuliert im Browser.</p>
+<canvas id="c" width="520" height="500"></canvas>
+<div class="btns" id="btns"></div>
+<script>
+// gleiche Maske und Kettenreihenfolge wie src/heart_map.h
+const MASK = [".XX...XX.", "XXXX.XXXX", "XXXXXXXXX", "XXXXXXXXX",
+              ".XXXXXXX.", "..XXXXX..", "...XXX...", "....X...."];
+const ROWS = 8, COLS = 9;
+const pos = [];
+for (let k = 0; k < ROWS; k++) {
+  const r = ROWS - 1 - k, ltr = k % 2 === 0;
+  for (let j = 0; j < COLS; j++) {
+    const c = ltr ? j : COLS - 1 - j;
+    if (MASK[r][c] === "X") pos.push({ c, r });
+  }
+}
+const N = pos.length;
+let maxd = 0;
+const dist = pos.map(p => { const d = Math.hypot(p.c - 4, p.r - 3.2); maxd = Math.max(maxd, d); return d; })
+                .map(d => Math.floor(d / maxd * 255));
+let L = Array.from({ length: N }, () => [0, 0, 0]);
+
+// --- kleine FastLED-Nachbauten ---------------------------------------------
+const sin8 = x => Math.round(128 + 127 * Math.sin((x & 255) / 256 * 2 * Math.PI));
+const cubicwave8 = x => { x &= 255; let t = x < 128 ? x * 2 : (255 - x) * 2; t /= 255; return Math.round(255 * t * t * (3 - 2 * t)); };
+const rnd = n => Math.floor(Math.random() * n);
+function hsv(h, s, v) {
+  h = (h & 255) / 255 * 6; s /= 255; v /= 255;
+  const i = Math.floor(h), f = h - i, p = v * (1 - s), q = v * (1 - s * f), t = v * (1 - s * (1 - f));
+  const [r, g, b] = [[v, t, p], [q, v, p], [p, v, t], [p, q, v], [t, p, v], [v, p, q]][i % 6];
+  return [r * 255, g * 255, b * 255];
+}
+const blend = (a, b, amt) => a.map((x, i) => x + (b[i] - x) * amt / 255);
+function heatColor(t) {
+  const s = Math.floor(t * 191 / 255), ramp = (s & 63) << 2;
+  if (s & 128) return [255, 255, ramp];
+  if (s & 64) return [255, ramp, 0];
+  return [ramp, 0, 0];
+}
+
+// --- Effekte (wie src/effects.cpp) ----------------------------------------
+const heat = Array.from({ length: ROWS }, () => new Array(COLS).fill(0));
+let lastFire = 0;
+const FX = {
+  Herzschlag(ms) {
+    const t = ms % 1100;
+    for (let i = 0; i < N; i++) {
+      const tt = t - Math.floor(dist[i] / 4);
+      let v = 0;
+      if (tt >= 0 && tt < 160) v = cubicwave8(Math.floor(tt * 255 / 160));
+      else if (tt >= 260 && tt < 400) v = cubicwave8(Math.floor((tt - 260) * 255 / 140)) * 3 / 4;
+      L[i] = hsv(250, 255, Math.min(255, v * 230 / 255 + 18));
+    }
+  },
+  Regenbogen(ms) {
+    const base = Math.floor(ms / 12);
+    for (let i = 0; i < N; i++) L[i] = hsv(base + (pos[i].c + pos[i].r) * 14, 255, 255);
+  },
+  Wellen(ms) {
+    const phase = Math.floor(ms / 6), hue = Math.floor(ms / 60);
+    for (let i = 0; i < N; i++) { const w = sin8(dist[i] * 2 - phase); L[i] = hsv(hue + dist[i] / 4, 230, w * w / 255); }
+  },
+  Glitzer() {
+    for (let i = 0; i < N; i++) L[i] = blend(L[i], [40, 0, 12], 24);
+    if (rnd(256) < 90) L[rnd(N)] = [255, 255, 255];
+    if (rnd(256) < 40) L[rnd(N)] = hsv(230, 120, 255);
+  },
+  Feuer(ms) {
+    if (ms - lastFire < 30) return; lastFire = ms;
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) heat[r][c] = Math.max(0, heat[r][c] - 10 - rnd(50));
+    for (let r = 0; r < ROWS - 1; r++) for (let c = 0; c < COLS; c++) {
+      const l = c > 0 ? c - 1 : c, rr = c < COLS - 1 ? c + 1 : c, b2 = Math.min(r + 2, ROWS - 1);
+      heat[r][c] = Math.floor((heat[r + 1][c] * 2 + heat[r + 1][l] + heat[r + 1][rr] + heat[b2][c] * 2) / 6);
+    }
+    for (let c = 2; c < 7; c++) if (rnd(256) < 130) heat[ROWS - 1][c] = Math.min(255, heat[ROWS - 1][c] + 120 + rnd(100));
+    for (let r = ROWS - 3; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (rnd(256) < 25) heat[r][c] = Math.min(255, heat[r][c] + 40 + rnd(80));
+    for (let i = 0; i < N; i++) L[i] = heatColor(heat[pos[i].r][pos[i].c]);
+  },
+  Scanner(ms) {
+    const p = ((Math.sin(ms / 1000 * 2 * Math.PI * 18 / 60 - Math.PI / 2) + 1) / 2) * (ROWS - 1) * 16;
+    const hue = Math.floor(ms / 40);
+    for (let i = 0; i < N; i++) {
+      const d = Math.abs(pos[i].r * 16 - p), v = d < 24 ? 255 - d * 10 : 0;
+      L[i] = blend(L[i], hsv(hue + pos[i].c * 6, 255, v), 80);
+    }
+  },
+  Konfetti() {
+    L = L.map(x => x.map(v => v * (255 - 12) / 255));
+    if (rnd(256) < 120) { const i = rnd(N), add = hsv(rnd(256), 200, 255); L[i] = L[i].map((v, k) => Math.min(255, v + add[k])); }
+  },
+};
+const names = [...Object.keys(FX), "Auto"];
+let mode = 0, autoIdx = 0, autoAt = 0;
+
+const btns = document.getElementById("btns");
+names.forEach((n, i) => {
+  const b = document.createElement("button");
+  b.textContent = n;
+  b.onclick = () => { mode = i; autoIdx = 0; autoAt = performance.now(); L = L.map(() => [0, 0, 0]); render(); };
+  btns.appendChild(b);
+});
+function render() { [...btns.children].forEach((b, i) => b.classList.toggle("on", i === mode)); }
+render();
+
+// --- Zeichnen ----------------------------------------------------------------
+const cv = document.getElementById("c"), ctx = cv.getContext("2d");
+const P = 46, OX = 260, OY = 262;
+const xy = p => [OX + (p.c - 4) * P, OY + (p.r - 3.5) * P];
+function heartPath() {
+  // gleiche Form wie die Platine (gen_pcb.py): zwei Bögen + 45°-Flanken, in mm
+  const R = (70 - 30 + 32) / Math.SQRT2, notch = Math.atan2(Math.sqrt(R * R - 900), -30);
+  const right = [];
+  for (let i = 0; i <= 60; i++) {
+    const a = -Math.PI / 4 + (notch + Math.PI / 4) * i / 60;
+    right.push([30 + R * Math.cos(a), -32 - R * Math.sin(a)]);
+  }
+  const pts = [[0, 70], ...right, ...right.slice().reverse().map(([x, y]) => [-x, y])];
+  const s = P / 16;
+  ctx.beginPath();
+  pts.forEach(([x, y], i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, OX + x * s, OY + y * s));
+  ctx.closePath();
+}
+function frame(ms) {
+  let fx = mode;
+  if (mode === names.length - 1) {
+    if (ms - autoAt > 15000) { autoAt = ms; autoIdx = (autoIdx + 1) % (names.length - 1); }
+    fx = autoIdx;
+  }
+  FX[names[fx]](ms);
+  ctx.fillStyle = "#0d0b10"; ctx.fillRect(0, 0, cv.width, cv.height);
+  heartPath(); ctx.fillStyle = "#14321f"; ctx.fill();
+  ctx.globalCompositeOperation = "lighter";
+  for (let i = 0; i < N; i++) {
+    const [x, y] = xy(pos[i]), [r, g, b] = L[i].map(v => Math.round(Math.max(0, Math.min(255, v))));
+    const grd = ctx.createRadialGradient(x, y, 2, x, y, 30);
+    grd.addColorStop(0, `rgba(${r},${g},${b},0.9)`); grd.addColorStop(1, `rgba(${r},${g},${b},0)`);
+    ctx.fillStyle = grd; ctx.fillRect(x - 30, y - 30, 60, 60);
+  }
+  ctx.globalCompositeOperation = "source-over";
+  for (let i = 0; i < N; i++) {
+    const [x, y] = xy(pos[i]);
+    ctx.fillStyle = "#f4f1ea"; ctx.fillRect(x - 9, y - 9, 18, 18);
+    const [r, g, b] = L[i].map(v => Math.round(Math.max(0, Math.min(255, v))));
+    ctx.fillStyle = `rgb(${r},${g},${b})`; ctx.beginPath(); ctx.arc(x, y, 7, 0, 7); ctx.fill();
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

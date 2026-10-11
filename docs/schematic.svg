@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 560" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <title>LED-Herz Schaltplan</title>
+  <rect width="1060" height="560" fill="#ffffff"/>
+  <style>
+    .w{stroke:#1a1a1a;stroke-width:2;fill:none}
+    .p5{stroke:#c62828;stroke-width:2.5;fill:none}
+    .g{stroke:#1565c0;stroke-width:2;fill:none}
+    .d{stroke:#2e7d32;stroke-width:2;fill:none}
+    .box{fill:#fafafa;stroke:#1a1a1a;stroke-width:2}
+    .t{fill:#1a1a1a}
+    .s{fill:#555;font-size:11px}
+    .h{font-weight:bold;font-size:14px}
+    .r{fill:#c62828;font-weight:bold}
+    .b{fill:#1565c0;font-weight:bold}
+    .gr{fill:#2e7d32;font-weight:bold}
+  </style>
+
+  <text x="20" y="30" class="t" font-size="20" font-weight="bold">LED-Herz – Schaltplan</text>
+  <text x="20" y="50" class="s">Rot = +5V, Blau = GND, Grün = Datenleitung. Netznamen wie in hardware/heart.kicad_pcb</text>
+
+  <!-- Schienen -->
+  <path class="p5" d="M140 110 H1020"/><text x="1020" y="100" text-anchor="end" class="r">+5V</text>
+  <path class="g" d="M140 510 H1020"/><text x="1020" y="530" text-anchor="end" class="b">GND</text>
+
+  <!-- J1 USB-C -->
+  <text x="85" y="140" text-anchor="middle" class="h">J1 USB-C</text>
+  <rect class="box" x="30" y="150" width="110" height="150" rx="6"/>
+  <text x="132" y="175" text-anchor="end" class="t">VBUS</text>
+  <text x="132" y="215" text-anchor="end" class="t">CC1</text>
+  <text x="132" y="245" text-anchor="end" class="t">CC2</text>
+  <text x="132" y="285" text-anchor="end" class="t">GND</text>
+  <text x="85" y="318" text-anchor="middle" class="s">nur Strom, 5V / 3A</text>
+  <path class="p5" d="M140 170 H160 V110"/>
+  <path class="g" d="M140 280 H160 V510"/>
+  <!-- R2 / R3 -->
+  <path class="w" d="M140 210 H190 V340"/>
+  <rect class="box" x="183" y="340" width="14" height="40"/>
+  <path class="g" d="M190 380 V510"/>
+  <text x="203" y="358" class="t">R2</text><text x="203" y="373" class="s">5k1</text>
+  <path class="w" d="M140 240 H250 V340"/>
+  <rect class="box" x="243" y="340" width="14" height="40"/>
+  <path class="g" d="M250 380 V510"/>
+  <text x="263" y="358" class="t">R3</text><text x="263" y="373" class="s">5k1</text>
+
+  <!-- C49 / C50 -->
+  <path class="p5" d="M320 110 V300"/><path class="w" d="M305 300 H335 M305 310 H335"/><path class="g" d="M320 310 V510"/>
+  <text x="340" y="300" class="t">C49</text><text x="340" y="315" class="s">10µF</text>
+  <path class="p5" d="M390 110 V300"/><path class="w" d="M375 300 H405"/><path class="w" d="M375 313 Q390 305 405 313"/><path class="g" d="M390 309 V510"/>
+  <text x="410" y="300" class="t">C50</text><text x="410" y="315" class="s">1000µF</text><text x="410" y="328" class="s">(hinten)</text>
+
+  <!-- D47 + XIAO -->
+  <path class="p5" d="M500 110 V140"/>
+  <path d="M490 140 H510 L500 160 Z" fill="#1a1a1a"/><path class="w" d="M488 162 H512"/>
+  <path class="w" d="M500 162 V215"/>
+  <text x="518" y="152" class="t">D47 SS34</text>
+  <text x="508" y="200" class="s">VIN_MCU</text>
+  <rect class="box" x="470" y="215" width="150" height="160" rx="6"/>
+  <text x="545" y="238" text-anchor="middle" class="h">U2 XIAO ESP32-C3</text>
+  <text x="545" y="253" text-anchor="middle" class="s">steckt hinten</text>
+  <text x="500" y="275" text-anchor="middle" class="t">5V</text>
+  <text x="612" y="300" text-anchor="end" class="t">D10</text>
+  <text x="612" y="340" text-anchor="end" class="t">D2</text>
+  <text x="545" y="366" text-anchor="middle" class="t">GND</text>
+  <path class="g" d="M545 375 V510"/>
+
+  <!-- Taster -->
+  <path class="w" d="M620 335 H680 V420"/>
+  <text x="688" y="395" class="s">BUTTON</text>
+  <circle cx="680" cy="420" r="3" fill="#1a1a1a"/><path class="w" d="M680 420 L700 446"/>
+  <circle cx="680" cy="455" r="3" fill="#1a1a1a"/><path class="g" d="M680 455 V510"/>
+  <text x="712" y="436" class="t">SW1 „EFFEKT“</text>
+  <text x="712" y="452" class="s">interner Pull-up im ESP32</text>
+
+  <!-- U1 Pegelwandler -->
+  <path class="d" d="M620 295 H660"/>
+    <rect class="box" x="660" y="215" width="160" height="110" rx="6"/>
+  <text x="740" y="238" text-anchor="middle" class="h">U1 74AHCT1G125</text>
+  <text x="740" y="254" text-anchor="middle" class="s">3,3V → 5V Pegel</text>
+  <text x="668" y="299" class="t">A</text>
+  <text x="668" y="275" class="s">DATA_3V3</text>
+  <text x="812" y="299" text-anchor="end" class="t">Y</text>
+  <text x="790" y="275" text-anchor="middle" class="s">VCC</text>
+  <text x="740" y="318" text-anchor="middle" class="s">GND, /OE</text>
+  <path class="p5" d="M790 110 V215"/>
+  <path class="g" d="M740 325 V510"/>
+  <!-- C48 -->
+  <path class="p5" d="M850 110 V150"/><path class="w" d="M835 150 H865 M835 160 H865"/><path class="g" d="M850 160 V178 M840 178 H860"/>
+  <text x="870" y="160" class="s">C48 100nF</text>
+
+  <!-- R1 -->
+  <path class="d" d="M820 295 H840"/>
+  <rect class="box" x="840" y="288" width="40" height="14"/>
+  <text x="860" y="280" text-anchor="middle" class="t">R1 330Ω</text>
+  <path class="d" d="M880 295 H910"/>
+
+  <!-- LED-Kette -->
+  <rect class="box" x="910" y="255" width="80" height="80" rx="6"/>
+  <text x="950" y="282" text-anchor="middle" class="h">D1</text>
+  <text x="950" y="298" text-anchor="middle" class="s">WS2812B</text>
+  <text x="950" y="313" text-anchor="middle" class="s">+ C1 100nF</text>
+  <path class="p5" d="M950 110 V255"/>
+  <path class="g" d="M950 335 V510"/>
+  <path class="d" d="M990 295 H1010"/>
+  <text x="1012" y="290" class="gr">→</text>
+  <text x="1000" y="355" text-anchor="middle" class="gr">D2 … D46</text>
+  <text x="760" y="472" class="s">jede LED: VDD → +5V, VSS → GND,</text>
+  <text x="760" y="487" class="s">DOUT → DIN der nächsten LED,</text>
+  <text x="760" y="502" class="s">eigener 100nF (C1…C46)</text>
+</svg>
