@@ -11,9 +11,13 @@ Alles in mm. Koordinaten relativ zur Herzmitte, y zeigt nach unten.
 """
 import math
 import os
+import sys
+
 import pcbnew
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+from netlist import ref_uuid  # noqa: E402  gleiche IDs wie im Schaltplan
 OUT = os.path.join(HERE, "heart.kicad_pcb")
 FPLIB = "/usr/share/kicad/footprints"
 if not os.path.isdir(FPLIB):
@@ -105,6 +109,7 @@ def load(lib, name):
 def place(fp, ref, value, x, y, rot=0, back=False):
     fp.SetReference(ref)
     fp.SetValue(value)
+    fp.SetPath(pcbnew.KIID_PATH("/" + ref_uuid(ref)))  # Verknüpfung zum Schaltplan-Symbol
     board.Add(fp)
     fp.SetPosition(V(x, y))
     fp.SetOrientationDegrees(rot)

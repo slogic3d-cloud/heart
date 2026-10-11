@@ -19,6 +19,9 @@ Gesteuert wird alles von einem **Seeed XIAO ESP32-C3**, der hinten aufgesteckt i
 
 ![Schaltplan](docs/schematic.png)
 
+Das ist die vereinfachte Übersicht. Der **echte KiCad-Schaltplan** ist `hardware/heart.kicad_sch`
+(als PDF: [docs/schematic.pdf](docs/schematic.pdf)), siehe [Schaltplan in KiCad](#schaltplan-in-kicad).
+
 - **USB-C (J1)** liefert 5 V. Die zwei 5,1 kΩ an CC1/CC2 sagen dem Netzteil: „Ich will 5 V“.
 - **+5V** liegt als Kupferfläche auf der ganzen Vorderseite, **GND** als Fläche auf der ganzen Rückseite.
   Dadurch kommen alle LEDs ohne dicke Leiterbahnen an genug Strom.
@@ -38,10 +41,16 @@ Gesteuert wird alles von einem **Seeed XIAO ESP32-C3**, der hinten aufgesteckt i
 ```
 hardware/
   gen_pcb.py          erzeugt die komplette Platine per Skript (KiCad 7+)
+  gen_sch.py          erzeugt den KiCad-Schaltplan
+  netlist.py          Bauteil- und Netzliste (gemeinsame Basis für den Schaltplan)
+  check_sch.py        prüft: Schaltplan und Platine passen Pin für Pin zusammen
+  heart.kicad_pro     KiCad-Projekt – das hier öffnen
+  heart.kicad_sch     der Schaltplan
   drc.py              Design-Rule-Check (prüft Abstände, Verbindungen)
   export.py           Gerber + BOM + CPL für JLCPCB
   heart.kicad_pcb     die Platine (mit KiCad öffnen)
   heart.pretty/       eigener Footprint für den XIAO-Sockel
+  heart.kicad_sym     eigenes Symbol für den XIAO
   production/         fertige Bestelldateien (heart_gerber.zip, heart_bom.csv, heart_cpl.csv)
 src/                  Firmware (PlatformIO / Arduino)
 test/test_chain.cpp   prüft, dass Firmware und Platine dieselbe LED-Reihenfolge haben
@@ -125,20 +134,44 @@ Neue Effekte schreibst du in `src/effects.cpp` und trägst sie unten in `LIST` e
 |---|---|
 | ![Regenbogen](docs/preview_rainbow.png) | ![Feuer](docs/preview_fire.png) |
 
+## Schaltplan in KiCad
+
+1. KiCad 7 oder neuer installieren ([kicad.org](https://www.kicad.org/download/)).
+2. `hardware/heart.kicad_pro` öffnen. Im Projektfenster:
+   - **Schaltplan-Editor** → `heart.kicad_sch` (ein A2-Blatt: oben Strom, XIAO, Pegelwandler; unten die 46 LEDs)
+   - **Leiterplatten-Editor** → `heart.kicad_pcb`
+3. Die Bibliotheken `heart` (XIAO-Symbol und -Footprint) sind über `sym-lib-table` / `fp-lib-table`
+   im Projektordner eingebunden, da musst du nichts einstellen.
+
+Verbunden wird im Schaltplan über **Netzlabels** (z. B. `LED5_DOUT`, `DATA_5V`) und die Power-Symbole
+`+5V` / `GND`. Gleicher Name = gleiche Leitung. Die Namen sind exakt dieselben wie auf der Platine.
+
+Schaltplan und Platine sind **verknüpft**. Wenn du im Schaltplan etwas änderst (z. B. einen Wert),
+kannst du im Leiterplatten-Editor **Werkzeuge → Leiterplatte aus Schaltplan aktualisieren (F8)** drücken.
+Geprüft wird das mit:
+
+```bash
+python3 hardware/check_sch.py   # "OK: Schaltplan und Platine stimmen überein"
+```
+
+KiCad 8/9 fragt beim Öffnen evtl., ob die Dateien ins neue Format umgewandelt werden sollen. Das ist ok.
+
 ## 5. Platine selbst ändern
 
 Die Platine wird komplett von `hardware/gen_pcb.py` erzeugt (Herzform, Bauteile, Leiterbahnen, Kupferflächen).
 Du brauchst KiCad 7 oder neuer (mit Python).
 
 ```bash
+python3 hardware/gen_sch.py     # Schaltplan neu erzeugen
 python3 hardware/gen_pcb.py     # Platine neu erzeugen
+python3 hardware/check_sch.py   # Schaltplan == Platine?
 python3 hardware/drc.py         # prüfen: muss "0 unconnected pads" und keine Fehler zeigen
 python3 hardware/export.py      # Bestelldateien neu bauen
 g++ -std=c++11 -Isrc test/test_chain.cpp -o /tmp/t && /tmp/t   # Firmware passt zur Platine?
 ```
 
-Du kannst `heart.kicad_pcb` natürlich auch direkt in KiCad öffnen und von Hand weiterbearbeiten.
-Dann aber `gen_pcb.py` nicht mehr laufen lassen, sonst wird deine Änderung überschrieben.
+Du kannst Schaltplan und Platine natürlich auch direkt in KiCad von Hand weiterbearbeiten.
+Dann aber `gen_sch.py` / `gen_pcb.py` nicht mehr laufen lassen, sonst werden deine Änderungen überschrieben.
 
 Aktueller DRC-Stand: 0 Fehler, 0 offene Verbindungen. Es bleibt eine gewollte Warnung:
 Beim USB-C-Footprint wurde der Bestückungsdruck entfernt, weil er über den Platinenrand ragen würde.

@@ -1,5 +1,5 @@
 ** Drc report for /home/user/heart-/hardware/heart.kicad_pcb **
-** Created on 2026-10-11 21:17:20 **
+** Created on 2026-10-11 21:35:21 **
 
 ** Found 1 DRC violations **
 [lib_footprint_mismatch]: Footprint 'USB_C_Receptacle_HRO_TYPE-C-31-M-12' does not match copy in library 'Connector_USB'.

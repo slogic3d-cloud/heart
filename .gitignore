@@ -8,3 +8,4 @@
 fp-info-cache
 *.lck
 hardware/production/gerber/
+__pycache__/

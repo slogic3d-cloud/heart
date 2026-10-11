@@ -62,10 +62,34 @@ als **eigene Platine**, weil ich endlich mal ein eigenes PCB designen will.
 
 ### Nächste Schritte
 - [ ] Platine in KiCad selbst anschauen (3D-Ansicht: Ansicht → 3D-Viewer)
+- [x] Schaltplan in KiCad
 - [ ] Bei JLCPCB hochladen, **Bauteil-Drehung in der Vorschau prüfen**, bestellen
 - [ ] XIAO ESP32-C3, Buchsenleisten, Taster, Elko besorgen
 - [ ] Löten, flashen, testen
 - [ ] Video von der Lichtshow machen
+
+---
+
+## 2026-10-11 (später) – Echter KiCad-Schaltplan
+
+**Zeit:** _bitte eintragen_
+
+### Was ich gemacht habe
+- Richtigen **KiCad-Schaltplan** `hardware/heart.kicad_sch` gebaut, mit den Original-Symbolen aus KiCad
+  (WS2812B, 74AHCT1G125, USB-C 16P, …) und einem eigenen Symbol für den XIAO.
+- Alles ist über **Netzlabels** verbunden, die genauso heißen wie die Leitungen auf der Platine.
+- Schaltplan und Platine sind **verknüpft** (jedes Bauteil hat dieselbe ID in beiden Dateien),
+  dadurch funktioniert in KiCad „Leiterplatte aus Schaltplan aktualisieren“.
+- `check_sch.py` lässt KiCad die Netzliste exportieren und vergleicht **jeden Pin** mit der Platine:
+  106 Bauteile, 54 Netze, 328 Pins, alles gleich.
+- PDF zum Anschauen: `docs/schematic.pdf`
+
+### Probleme / Lösungen
+- KiCad wollte die erste Version nicht öffnen. Grund: Mein Skript hat in der Datei die Reihenfolge
+  von Einträgen vertauscht (`hide` vor `font`). Reihenfolge beibehalten, dann ging's.
+- Einige GND-/+5V-Symbole standen auf Nachbarpins → längere Leitungsstücke davor.
+
+![Schaltplan](docs/schematic_kicad.png)
 
 ---
 
