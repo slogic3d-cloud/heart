@@ -1,5 +1,7 @@
 # <3 LED-Herz
 
+*A heart with a matrix led in heart form.*
+
 Ein herzförmiges PCB mit **46 RGB-LEDs (WS2812B)**, das eine Lichtshow abspielt.
 Ein Taster auf der Rückseite schaltet zwischen den Effekten um, Strom kommt per **USB-C**.
 Gesteuert wird alles von einem **Seeed XIAO ESP32-C3**, der hinten aufgesteckt ist.
