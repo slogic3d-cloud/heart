@@ -1,6 +1,6 @@
 # Preise – LED-Herz (Euro und Dollar)
 
-Stand: **12.10.2026 13:29** · Kurs: 1 $ = 0,8926 € · 1 € = 1,1203 $ (open.er-api.com, Mon, 12 Oct 2026 00:02:32 +0000)
+Stand: **12.10.2026 18:22** · Kurs: 1 $ = 0,8926 € · 1 € = 1,1203 $ (open.er-api.com, Mon, 12 Oct 2026 00:02:32 +0000)
 
 Neu berechnen: `python3 tools/einkauf.py --boards 2`. **Live** = gerade vom Shop abgefragt, **Schätzung** = bitte selbst prüfen.
 
@@ -8,9 +8,9 @@ Neu berechnen: `python3 tools/einkauf.py --boards 2`. **Live** = gerade vom Shop
 
 | Posten | Euro | Dollar |
 |---|---|---|
-| JLCPCB: 5 Platinen, davon 2 bestückt, inkl. Versand | 63,77 € | 71,44 $ |
+| JLCPCB: 5 Platinen, davon 2 bestückt, inkl. Versand | 71,56 € | 80,16 $ |
 | Selbst kaufen (BerryBase + Amazon) | 40,56 € | 45,44 $ |
-| **Gesamt** | **104,33 €** | **116,88 $** |
+| **Gesamt** | **112,12 €** | **125,60 $** |
 
 Versandkosten bei BerryBase und Amazon sind nicht eingerechnet (hängen vom Warenkorb ab).
 
@@ -31,7 +31,7 @@ Versandkosten bei BerryBase und Amazon sind nicht eingerechnet (hängen vom Ware
 
 | Posten | Dollar | Euro | Quelle |
 |---|---|---|---|
-| 5 × Leiterplatte 2 Lagen, 162 × 153 mm | 20,00 $ | 17,85 € | Schätzung |
+| 5 × Leiterplatte 2 Lagen, 162 × 153 mm | 17,01 $ | 15,18 € | JLCPCB-Angebot 12.10.2026 (inkl. Ingenieurgebühr + Dateibestätigung) |
 | 100nF 50V X7R 0603 (C14663) × 94 | 1,33 $ | 1,19 € | LCSC live, 0,0142 $/Stück |
 | 10uF 25V X5R 0805 (C15850) × 2 | 0,14 $ | 0,12 € | LCSC live, 0,0695 $/Stück |
 | 330R 1% 0603 (C23138) × 2 | 0,01 $ | 0,00 € | LCSC live, 0,0026 $/Stück |
@@ -45,10 +45,10 @@ Versandkosten bei BerryBase und Amazon sind nicht eingerechnet (hängen vom Ware
 | Bestückung: 618 Lötstellen | 0,99 $ | 0,88 € | JLCPCB-Preisliste |
 | Bestückung: 4 Extended-Teile | 12,28 $ | 10,96 € | JLCPCB-Preisliste |
 | Bestückung: ggf. Handlöten USB-C | 3,58 $ | 3,20 € | JLCPCB-Preisliste |
-| Versand nach Deutschland | 15,00 $ | 13,39 € | Schätzung |
-| **Summe JLCPCB** | **71,44 $** | **63,77 €** | |
+| Versand nach Deutschland | 26,72 $ | 23,85 € | JLCPCB-Angebot, DHL Express (billigere Versandart wählbar) |
+| **Summe JLCPCB** | **80,16 $** | **71,56 €** | |
 
-Platinenfläche ca. 247 cm², also kein Großformat-Aufschlag (erst ab 650 cm²). Den echten Leiterplatten- und Versandpreis zeigt JLCPCB beim Hochladen der Gerber-Datei.
+Platinenfläche ca. 247 cm², also kein Großformat-Aufschlag (erst ab 650 cm²). Leiterplatte und Versand: echtes JLCPCB-Angebot. Bauteile und Bestückung: berechnet aus LCSC-Preisen und der JLCPCB-Preisliste – den genauen Betrag zeigt JLCPCB, sobald die Leiterplattenmontage eingeschaltet ist. Gutscheine von JLCPCB sind nicht abgezogen.
 
 ## Filament (Anycubic Kobra 2 Neo)
 

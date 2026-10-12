@@ -1,6 +1,6 @@
 # Einkaufsliste – Links (Deutschland)
 
-Stand: 12.10.2026 13:29. Nur **BerryBase** und **Amazon (Versand durch Amazon)**, dazu JLCPCB für die Platine.
+Stand: 12.10.2026 18:22. Nur **BerryBase** und **Amazon (Versand durch Amazon)**, dazu JLCPCB für die Platine.
 
 ## 1. Platine (fertig bestückt)
 

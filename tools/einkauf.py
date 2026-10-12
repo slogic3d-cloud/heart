@@ -65,8 +65,10 @@ JOINTS = {"LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm": 4, "C_0603_1608Metric": 2,
           "USB_C_Receptacle_HRO_TYPE-C-31-M-12": 16}
 BASIC = {"C14663", "C15850", "C23186", "C23138"}
 JLC = {"setup": 8.18, "stencil": 1.53, "per_joint": 0.0016, "extended": 3.07, "hand_solder": 3.58}
-PCB_5PCS_USD_ESTIMATE = 20.0   # SCHÄTZUNG – echten Preis im JLC-Rechner prüfen
-SHIPPING_USD_ESTIMATE = 15.0   # SCHÄTZUNG
+# Echtes JLCPCB-Angebot vom 12.10.2026 (in Euro, ohne Bestückung):
+# Ingenieurgebühr 3,56 + Leiterplatte 10,68 + Produktionsdatei bestätigen 0,93 = 15,18 €
+PCB_5PCS_EUR = 15.18
+SHIPPING_EUR = 23.85           # DHL Express laut Angebot – günstigere Versandart möglich
 
 # Filament (Anycubic Kobra 2 Neo, cad/slicer_kobra2neo.ini)
 FILAMENT_G = {"Rückschale": 88.55, "Pixel-Gitter": 57.88, "Diffusor": 21.89,
@@ -153,6 +155,8 @@ def main():
             parts.append((r["Comment"], code, qty, u))
     assy_usd = (JLC["setup"] + JLC["stencil"] + joints * JLC["per_joint"]
                 + ext * JLC["extended"] + JLC["hand_solder"])
+    PCB_5PCS_USD_ESTIMATE = PCB_5PCS_EUR * eur_usd    # Name bleibt, Wert jetzt echt
+    SHIPPING_USD_ESTIMATE = SHIPPING_EUR * eur_usd
     jlc_usd = PCB_5PCS_USD_ESTIMATE + parts_usd + assy_usd + SHIPPING_USD_ESTIMATE
     total_eur = jlc_usd * usd_eur + self_eur
     fil_g = sum(FILAMENT_G.values())
@@ -211,7 +215,7 @@ def main():
           "## JLCPCB", "",
           "| Posten | Dollar | Euro | Quelle |", "|---|---|---|---|"]
     P.append(f"| 5 × Leiterplatte 2 Lagen, 162 × 153 mm | {U(PCB_5PCS_USD_ESTIMATE)} | "
-             f"{E(PCB_5PCS_USD_ESTIMATE * usd_eur)} | Schätzung |")
+             f"{E(PCB_5PCS_USD_ESTIMATE * usd_eur)} | JLCPCB-Angebot 12.10.2026 (inkl. Ingenieurgebühr + Dateibestätigung) |")
     for c, code, qty, u in parts:
         P.append(f"| {c} ({code}) × {qty} | {U(u * qty)} | {E(u * qty * usd_eur)} | LCSC live, {U(u, 4)}/Stück |")
     P += [f"| Bestückung: Einrichtung | {U(JLC['setup'])} | {E(JLC['setup'] * usd_eur)} | JLCPCB-Preisliste |",
@@ -223,10 +227,12 @@ def main():
           f"| Bestückung: ggf. Handlöten USB-C | {U(JLC['hand_solder'])} | "
           f"{E(JLC['hand_solder'] * usd_eur)} | JLCPCB-Preisliste |",
           f"| Versand nach Deutschland | {U(SHIPPING_USD_ESTIMATE)} | "
-          f"{E(SHIPPING_USD_ESTIMATE * usd_eur)} | Schätzung |",
+          f"{E(SHIPPING_USD_ESTIMATE * usd_eur)} | JLCPCB-Angebot, DHL Express (billigere Versandart wählbar) |",
           f"| **Summe JLCPCB** | **{U(jlc_usd)}** | **{E(jlc_usd * usd_eur)}** | |", "",
           "Platinenfläche ca. 247 cm², also kein Großformat-Aufschlag (erst ab 650 cm²). "
-          "Den echten Leiterplatten- und Versandpreis zeigt JLCPCB beim Hochladen der Gerber-Datei.", "",
+          "Leiterplatte und Versand: echtes JLCPCB-Angebot. Bauteile und Bestückung: berechnet aus "
+          "LCSC-Preisen und der JLCPCB-Preisliste – den genauen Betrag zeigt JLCPCB, sobald die "
+          "Leiterplattenmontage eingeschaltet ist. Gutscheine von JLCPCB sind nicht abgezogen.", "",
           "## Filament (Anycubic Kobra 2 Neo)", "",
           "| Teil | Gramm |", "|---|---|"]
     P += [f"| {k} | {v:.0f} g |" for k, v in FILAMENT_G.items()]
