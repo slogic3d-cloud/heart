@@ -59,7 +59,11 @@ cad/gen_case.py       erzeugt Gehäuse, Pixel-Gitter, Diffusor, Tasterstößel u
 cad/out/              STEP-Dateien für Fusion 360 + 3MF/STL-Dateien zum Drucken
 docs/                 Bilder und Schaltplan
 JOURNAL.md            Bau-Tagebuch
+KOSTEN.md             Kostenaufstellung (neu erzeugen: python3 tools/kosten.py)
 ```
+
+**Was kostet das?** Siehe [KOSTEN.md](KOSTEN.md). Die Bauteilpreise und der Dollarkurs werden live abgefragt,
+mit `python3 tools/kosten.py` aktualisierst du die Datei.
 
 ## 1. Platine bei JLCPCB bestellen
 
