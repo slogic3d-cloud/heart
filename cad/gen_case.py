@@ -8,6 +8,7 @@ Gehäuse + Ständer für das LED-Herz (CadQuery).
 Erzeugt in cad/out/:
     *.step  -> in Fusion 360 öffnen (Datei > Öffnen > Von meinem Computer)
     *.stl   -> zum 3D-Druck (z.B. bei einem Druckdienst bestellen)
+    *.3mf   -> dasselbe als 3MF (Bambu Studio, PrusaSlicer, Cura, Druckdienste)
     heart_case_assembly.step -> alles zusammengebaut, inkl. Platine
 
 Koordinaten: x nach rechts, y nach oben, z nach vorne (zum Betrachter).
@@ -242,7 +243,10 @@ def main():
     }
     for name, wp in parts.items():
         cq.exporters.export(wp, os.path.join(OUT, name + ".step"))
-        cq.exporters.export(wp, os.path.join(OUT, name + ".stl"), tolerance=0.05, angularTolerance=0.2)
+        # Druckdateien: Unterseite aufs Druckbett (z = 0); STEP bleibt in Einbauposition
+        flat = wp.translate((0, 0, -wp.val().BoundingBox().zmin))
+        cq.exporters.export(flat, os.path.join(OUT, name + ".stl"), tolerance=0.02, angularTolerance=0.05)
+        cq.exporters.export(flat, os.path.join(OUT, name + ".3mf"), tolerance=0.02, angularTolerance=0.05)
         bb = wp.val().BoundingBox()
         print(f"{name:28s} {bb.xlen:6.1f} x {bb.ylen:6.1f} x {bb.zlen:5.1f} mm  "
               f"Volumen {wp.val().Volume() / 1000:6.1f} cm³")

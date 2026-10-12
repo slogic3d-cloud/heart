@@ -56,7 +56,7 @@ src/                  Firmware (PlatformIO / Arduino)
 test/test_chain.cpp   prüft, dass Firmware und Platine dieselbe LED-Reihenfolge haben
 tools/preview.html    Lichtshow im Browser ansehen, ganz ohne Hardware
 cad/gen_case.py       erzeugt Gehäuse, Pixel-Gitter, Diffusor, Tasterstößel und Ständer (CadQuery)
-cad/out/              STEP-Dateien für Fusion 360 + STL-Dateien zum Drucken
+cad/out/              STEP-Dateien für Fusion 360 + 3MF/STL-Dateien zum Drucken
 docs/                 Bilder und Schaltplan
 JOURNAL.md            Bau-Tagebuch
 ```
@@ -166,7 +166,8 @@ KiCad 8/9 fragt beim Öffnen evtl., ob die Dateien ins neue Format umgewandelt w
 |---|---|
 | ![Ständer](docs/case_stand.png) | ![Rückseite](docs/case_back.png) |
 
-Alle Teile liegen in `cad/out/`, jeweils als **STEP** (für Fusion 360) und **STL** (zum Drucken):
+Alle Teile liegen in `cad/out/`, jeweils als **STEP** (für Fusion 360) und als **3MF** und **STL** (zum Drucken).
+Die Druckdateien liegen schon flach auf dem Druckbett (Unterseite bei z = 0), die STEP-Dateien in Einbauposition.
 
 | Datei | Teil | Material-Tipp |
 |---|---|---|
@@ -188,7 +189,7 @@ pip install cadquery
 python3 cad/gen_case.py     # baut alle Teile neu und prüft auf Kollisionen mit den Bauteilen
 ```
 
-**Ohne eigenen 3D-Drucker:** Die STL-Dateien bei einem Druckdienst hochladen, z. B. bei
+**Ohne eigenen 3D-Drucker:** Die 3MF- (oder STL-)Dateien bei einem Druckdienst hochladen, z. B. bei
 JLCPCB (bietet auch 3D-Druck an) oder einem anderen Online-Druckdienst.
 FDM-Druck in PLA ist am günstigsten. Die Rückschale und das Gitter sind die großen Teile,
 schau dir den Preis an, bevor du bestellst.
