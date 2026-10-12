@@ -63,7 +63,7 @@ XXXXXXXXX
 ....X....
 ```
 
-![Effekte in der Vorschau](https://raw.githubusercontent.com/slogic3d-cloud/heart-/main/docs/preview_rainbow.png)
+![Effekte in der Vorschau](https://raw.githubusercontent.com/slogic3d-cloud/heart/main/docs/preview_rainbow.png)
 
 ---
 
@@ -95,9 +95,9 @@ Was schiefging:
 Ergebnis: **DRC 0 Fehler, 0 offene Verbindungen.** Bestelldateien für JLCPCB (Gerber, BOM, CPL)
 in `hardware/production/`, alle LCSC-Teilenummern bei LCSC nachgeprüft.
 
-![Platine Vorderseite](https://raw.githubusercontent.com/slogic3d-cloud/heart-/main/docs/pcb_front.png)
+![Platine Vorderseite](https://raw.githubusercontent.com/slogic3d-cloud/heart/main/docs/pcb_front.png)
 
-![Platine Rückseite](https://raw.githubusercontent.com/slogic3d-cloud/heart-/main/docs/pcb_back.png)
+![Platine Rückseite](https://raw.githubusercontent.com/slogic3d-cloud/heart/main/docs/pcb_back.png)
 
 ---
 
@@ -114,7 +114,7 @@ in `hardware/production/`, alle LCSC-Teilenummern bei LCSC nachgeprüft.
   Das Feuer war erst viel zu hell (nur gelb/weiß) → Abkühlung und Funken angepasst.
 - README mit Bestell-, Löt- und Flash-Anleitung.
 
-![Feuer-Effekt in der Vorschau](https://raw.githubusercontent.com/slogic3d-cloud/heart-/main/docs/preview_fire.png)
+![Feuer-Effekt in der Vorschau](https://raw.githubusercontent.com/slogic3d-cloud/heart/main/docs/preview_fire.png)
 
 ---
 
@@ -132,7 +132,7 @@ in `hardware/production/`, alle LCSC-Teilenummern bei LCSC nachgeprüft.
 Problem: KiCad wollte die erste Version nicht öffnen, weil das Skript die Reihenfolge von Einträgen
 in der Datei vertauscht hat. Reihenfolge beibehalten, dann ging's.
 
-![Schaltplan](https://raw.githubusercontent.com/slogic3d-cloud/heart-/main/docs/schematic_kicad.png)
+![Schaltplan](https://raw.githubusercontent.com/slogic3d-cloud/heart/main/docs/schematic_kicad.png)
 
 ---
 
@@ -154,9 +154,9 @@ Probleme:
 - Die USB-C-Buchse steht 1,1 mm über den Platinenrand → Schlitz in der Wand nach oben offen,
   sonst bekommt man die Platine nicht rein.
 
-![Explosionszeichnung](https://raw.githubusercontent.com/slogic3d-cloud/heart-/main/docs/case_exploded.png)
+![Explosionszeichnung](https://raw.githubusercontent.com/slogic3d-cloud/heart/main/docs/case_exploded.png)
 
-![Im Ständer](https://raw.githubusercontent.com/slogic3d-cloud/heart-/main/docs/case_stand.png)
+![Im Ständer](https://raw.githubusercontent.com/slogic3d-cloud/heart/main/docs/case_stand.png)
 
 ---
 
@@ -178,7 +178,7 @@ Probleme:
   BerryBase nicht → Amazon.
 - Gesamtkosten ca. **104 €** (davon ca. 64 € JLCPCB, Leiterplatte und Versand dort geschätzt).
 
-![Gehäuse von vorne](https://raw.githubusercontent.com/slogic3d-cloud/heart-/main/docs/case_front.png)
+![Gehäuse von vorne](https://raw.githubusercontent.com/slogic3d-cloud/heart/main/docs/case_front.png)
 
 ---
 
