@@ -59,11 +59,12 @@ cad/gen_case.py       erzeugt Gehäuse, Pixel-Gitter, Diffusor, Tasterstößel u
 cad/out/              STEP-Dateien für Fusion 360 + 3MF/STL-Dateien zum Drucken
 docs/                 Bilder und Schaltplan
 JOURNAL.md            Bau-Tagebuch
-KOSTEN.md             Kostenaufstellung (neu erzeugen: python3 tools/kosten.py)
+einkauf/              links.md (Kauflinks) und price.md (alle Preise in € und $), neu erzeugen: python3 tools/einkauf.py
 ```
 
-**Was kostet das?** Siehe [KOSTEN.md](KOSTEN.md). Die Bauteilpreise und der Dollarkurs werden live abgefragt,
-mit `python3 tools/kosten.py` aktualisierst du die Datei.
+**Was kostet das und wo kaufe ich es?** Siehe [einkauf/price.md](einkauf/price.md) (alle Preise in Euro und Dollar)
+und [einkauf/links.md](einkauf/links.md) (Kauflinks: BerryBase, Amazon, JLCPCB).
+Preise und Dollarkurs werden live abgefragt, mit `python3 tools/einkauf.py` aktualisierst du beides.
 
 ## 1. Platine bei JLCPCB bestellen
 
@@ -102,7 +103,7 @@ mit `python3 tools/kosten.py` aktualisierst du die Datei.
 | Seeed XIAO ESP32-C3 | U2 | mit 2 × 7-poligen Stiftleisten am XIAO |
 | 2 × Buchsenleiste 1×7, 2,54 mm | U2 | auf die Platine löten, XIAO steckt drauf. **Bauteile des XIAO zeigen von der Platine weg, seine USB-C-Buchse zur Ausbuchtung im aufgedruckten Rahmen** |
 | Taster 6 × 6 mm (THT) | SW1 „EFFEKT“ | |
-| Elko 1000 µF / 10 V, Ø 10 mm, Raster 5 mm | C50 | **Polung!** Das eckige Pad ist Plus |
+| Elko 1000 µF (10 V oder mehr, z. B. 25 V), Ø 10 mm, Raster 5 mm, max. 20 mm hoch | C50 | **Polung!** Das eckige Pad ist Plus |
 
 Tipp: Erst Buchsenleisten, dann Taster, zuletzt den Elko löten.
 

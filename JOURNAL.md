@@ -4,17 +4,39 @@ Ein herzförmiges PCB mit 46 RGB-LEDs (WS2812B), einem Seeed XIAO ESP32-C3 und e
 das Lichtshows abspielt. Dazu ein 3D-gedrucktes Gehäuse mit Pixel-Gitter und ein Ständer.
 
 **Phase:** Design
-**Gesamtzeit:** 1,7 h
+**Gesamtzeit:** 2,5 h, verteilt auf 2 Tage
 
-> Hinweis: Das Projekt habe ich zusammen mit dem KI-Assistenten Claude (Claude Code) gemacht.
-> Ich habe die Entscheidungen getroffen (was gebaut wird, Bauteile, Bestückung, Größe, Gehäuse),
-> Claude hat dabei Code, Platinen-Skripte und Doku geschrieben.
+| Tag | Zeit |
+|---|---|
+| 11.10.2026 | 1,2 h |
+| 12.10.2026 | 1,3 h |
+
+## Wie ich das Projekt gemacht habe
+
+Ich habe das ganze Projekt **zusammen mit Claude** gemacht, einem KI-Assistenten von Anthropic
+(in Claude Code). Die Zeiten oben sind die echte Zeit, die ich mit Claude an dem Projekt gearbeitet habe
+(aus den Zeitstempeln unserer Sitzungen).
+
+- **Ich** habe entschieden, was gebaut wird: Herz mit LED-Matrix, ESP32, Taster, eigenes PCB,
+  Bestückung durch JLCPCB, Größe 15–20 cm, KiCad, Gehäuse + Ständer, Filament und Drucker
+  (Anycubic PLA+ rot, Kobra 2 Neo), Shops (BerryBase, Amazon).
+- **Claude** hat Platine, Schaltplan, Firmware, Gehäuse und Doku erstellt und **alles überprüft**:
+  - Platine: KiCad-Design-Rule-Check → 0 Fehler, 0 offene Verbindungen
+  - Schaltplan ↔ Platine: alle 106 Bauteile, 54 Netze und 328 Pins verglichen → identisch
+  - Firmware: kompiliert für den XIAO; Test, dass die LED-Reihenfolge in der Firmware zur Platine passt (46/46)
+  - Bauteile: alle LCSC-Teilenummern direkt bei LCSC nachgeschaut (richtiges Teil, auf Lager)
+  - Gehäuse: Kollisionsprüfung gegen Platine, XIAO, Elko, Taster und USB-Buchse → nichts stößt an;
+    3MF-Dateien geprüft (Millimeter, wasserdicht, Volumen stimmt)
+  - Filament: alle Teile mit dem Kobra-2-Neo-Profil geslict
+  - Einkauf: Shop-Links aufgerufen, Preise und Verfügbarkeit live abgefragt
+- **Noch nicht geprüft** (geht erst mit echter Hardware): ob die Platine nach dem Löten funktioniert
+  und ob die gedruckten Teile genau passen.
 
 ---
 
 ## 11.10.2026 – Idee, Planung und Entscheidungen
 
-**Zeit:** 0,2 h
+**Zeit:** 0,2 h (mit Claude)
 
 Ich will ein Herz aus LEDs, das Lichtshows abspielt. Und ich will endlich mal ein **eigenes PCB** machen,
 statt LEDs auf Pappe zu kleben.
@@ -47,7 +69,7 @@ XXXXXXXXX
 
 ## 11.10.2026 – Platine designen (KiCad)
 
-**Zeit:** 0,5 h
+**Zeit:** 0,5 h (mit Claude)
 
 Die ganze Platine wird von einem Python-Skript (`hardware/gen_pcb.py`) in KiCad erzeugt:
 Herzumriss, 46 LEDs mit je einem 100-nF-Kondensator, die Datenleitung als Kette von LED zu LED,
@@ -81,7 +103,7 @@ in `hardware/production/`, alle LCSC-Teilenummern bei LCSC nachgeprüft.
 
 ## 11.10.2026 – Firmware, Vorschau und Doku
 
-**Zeit:** 0,3 h
+**Zeit:** 0,2 h (mit Claude)
 
 - Firmware mit **FastLED** (PlatformIO): 7 Effekte (Herzschlag, Regenbogen, Wellen, Glitzer, Feuer,
   Scanner, Konfetti) + Auto-Modus. Taster kurz/lang, Einstellungen bleiben gespeichert.
@@ -98,7 +120,7 @@ in `hardware/production/`, alle LCSC-Teilenummern bei LCSC nachgeprüft.
 
 ## 11.10.2026 – Schaltplan in KiCad
 
-**Zeit:** 0,3 h
+**Zeit:** 0,3 h (mit Claude)
 
 - Richtigen **KiCad-Schaltplan** `hardware/heart.kicad_sch` gebaut, mit den Symbolen aus der
   KiCad-Bibliothek und einem eigenen Symbol für den XIAO.
@@ -116,7 +138,7 @@ in der Datei vertauscht hat. Reihenfolge beibehalten, dann ging's.
 
 ## 12.10.2026 – Gehäuse und Ständer (Fusion 360 / 3D-Druck)
 
-**Zeit:** 0,4 h
+**Zeit:** 0,5 h (mit Claude)
 
 - Gehäuse mit **CadQuery** (CAD in Python) gebaut, Export als **STEP für Fusion 360** und STL zum Drucken:
   - **Rückschale** mit Abstandshaltern, Schlitz für die USB-C-Buchse, Fenster fürs XIAO-USB-Kabel,
@@ -135,6 +157,28 @@ Probleme:
 ![Explosionszeichnung](https://raw.githubusercontent.com/slogic3d-cloud/heart-/main/docs/case_exploded.png)
 
 ![Im Ständer](https://raw.githubusercontent.com/slogic3d-cloud/heart-/main/docs/case_stand.png)
+
+---
+
+## 12.10.2026 – 3MF-Dateien, Filament, Preise und Einkaufsliste
+
+**Zeit:** 0,8 h (mit Claude)
+
+- Alle Druckteile zusätzlich als **3MF** exportiert, flach aufs Druckbett gelegt, Rundungen feiner gemacht.
+  Geprüft: Millimeter, wasserdicht, Volumen wie im CAD.
+- **Filament** für meinen Drucker berechnet: mit den offiziellen Anycubic-Profilen für den
+  **Kobra 2 Neo** („0.20mm Standard“, „Anycubic PLA“) geslict → **210 g, ca. 10 h**, 1 Rolle Anycubic PLA+ rot reicht.
+  Den Anycubic Slicer konnte Claude nicht direkt installieren (Zertifikat vom Anycubic-Server abgelaufen),
+  deshalb dieselben Profile aus OrcaSlicer (darauf basiert der Anycubic Slicer) genommen.
+- **Einkaufsliste** im Ordner `einkauf/`: `links.md` mit allen Kauflinks (BerryBase, Amazon nur mit
+  Versand durch Amazon, JLCPCB) und `price.md` mit allen Preisen in **Euro und Dollar**.
+  Ein Skript fragt die Preise live ab (BerryBase, LCSC für JLCPCB, Dollarkurs).
+- Probleme: Bei BerryBase waren der 5-mm-Taster und der 16-V-Elko ausverkauft → 4,3-mm-Taster
+  (funktioniert mit dem Stößel) und 1000 µF / 25 V (gleiche Größe) genommen. Den XIAO ESP32-C3 hat
+  BerryBase nicht → Amazon.
+- Gesamtkosten ca. **104 €** (davon ca. 64 € JLCPCB, Leiterplatte und Versand dort geschätzt).
+
+![Gehäuse von vorne](https://raw.githubusercontent.com/slogic3d-cloud/heart-/main/docs/case_front.png)
 
 ---
 
