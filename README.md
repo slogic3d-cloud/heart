@@ -55,6 +55,8 @@ hardware/
 src/                  Firmware (PlatformIO / Arduino)
 test/test_chain.cpp   prüft, dass Firmware und Platine dieselbe LED-Reihenfolge haben
 tools/preview.html    Lichtshow im Browser ansehen, ganz ohne Hardware
+cad/gen_case.py       erzeugt Gehäuse, Pixel-Gitter, Diffusor, Tasterstößel und Ständer (CadQuery)
+cad/out/              STEP-Dateien für Fusion 360 + STL-Dateien zum Drucken
 docs/                 Bilder und Schaltplan
 JOURNAL.md            Bau-Tagebuch
 ```
@@ -155,6 +157,54 @@ python3 hardware/check_sch.py   # "OK: Schaltplan und Platine stimmen überein"
 ```
 
 KiCad 8/9 fragt beim Öffnen evtl., ob die Dateien ins neue Format umgewandelt werden sollen. Das ist ok.
+
+## Gehäuse und Ständer (Fusion 360 / 3D-Druck)
+
+![Explosionszeichnung](docs/case_exploded.png)
+
+| Im Ständer | Rückseite |
+|---|---|
+| ![Ständer](docs/case_stand.png) | ![Rückseite](docs/case_back.png) |
+
+Alle Teile liegen in `cad/out/`, jeweils als **STEP** (für Fusion 360) und **STL** (zum Drucken):
+
+| Datei | Teil | Material-Tipp |
+|---|---|---|
+| `heart_case_shell` | Rückschale mit Abstandshaltern, USB-C-Schlitz, Fenster fürs XIAO-Kabel, Tasterloch, 2 Schlüssellöchern | PLA/PETG, Farbe nach Wahl |
+| `heart_case_grid` | Pixel-Gitter (16-mm-Raster, 10 mm tief), jede LED leuchtet in ihrem eigenen Quadrat | **schwarz**, damit kein Licht in die Nachbarzelle scheint |
+| `heart_case_diffuser` | 1-mm-Platte vorne, macht aus den LED-Punkten gleichmäßige Pixel | weiß/transluzent. Alternative: Transparentpapier oder milchige Acrylplatte in Herzform |
+| `heart_case_button_plunger` | Stößel: drückt von hinten auf den Taster | beliebig |
+| `heart_stand` | Ständer für den Tisch, Herzspitze sitzt in einer 90°-V-Tasche, 10° nach hinten geneigt | beliebig |
+| `heart_case_assembly.step` | alles zusammengebaut, inkl. Platine (nur zum Anschauen) | – |
+| `heart_pcb.step` | die Platine aus KiCad | – |
+
+**In Fusion 360 öffnen:** *Datei → Öffnen → Von meinem Computer…* → `.step`-Datei wählen.
+Fusion lädt die Datei in die Cloud hoch und öffnet sie. Die Teile sind „dumme“ Volumenkörper
+(ohne Verlauf). Ändern kannst du sie trotzdem direkt, z. B. mit *Fläche verschieben* (*Press Pull*).
+Für größere Änderungen lieber die Maße oben in `cad/gen_case.py` anpassen und neu erzeugen:
+
+```bash
+pip install cadquery
+python3 cad/gen_case.py     # baut alle Teile neu und prüft auf Kollisionen mit den Bauteilen
+```
+
+**Ohne eigenen 3D-Drucker:** Die STL-Dateien bei einem Druckdienst hochladen, z. B. bei
+JLCPCB (bietet auch 3D-Druck an) oder einem anderen Online-Druckdienst.
+FDM-Druck in PLA ist am günstigsten. Die Rückschale und das Gitter sind die großen Teile,
+schau dir den Preis an, bevor du bestellst.
+
+**Zusammenbau:**
+1. Tasterstößel von innen durch das Loch in der Rückwand stecken (der Kragen bleibt innen).
+2. Platine einlegen: Die USB-C-Buchse gehört in den Schlitz an der linken unteren Kante.
+   Mit **3 Schrauben** durch die Befestigungslöcher in die Abstandshalter schrauben
+   (Kunststoff-/Blechschrauben ca. 2,9 × 9,5 mm, oder M3 × 8, die sich ins 2,5-mm-Loch schneiden).
+3. Pixel-Gitter einlegen (liegt auf der umlaufenden Kante, 4 mm über der Platine).
+4. Diffusor oben drauflegen (bei Bedarf mit ein paar Tropfen Kleber fixieren).
+5. Zum Flashen kommst du durch das Fenster in der Rückwand mit dem USB-Kabel an den XIAO.
+
+Maße: Gehäuse 167 × 158 × 41 mm. Hinter der Platine sind 22 mm Platz (XIAO auf Buchsenleisten,
+Elko bis 20 mm hoch). Der Stößel ist für einen 6 × 6-mm-Taster mit 4,9 mm Höhe ausgelegt.
+Ist dein Taster anders hoch, `BUTTON_H` in `cad/gen_case.py` ändern.
 
 ## 5. Platine selbst ändern
 

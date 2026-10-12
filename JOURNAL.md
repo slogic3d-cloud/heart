@@ -93,6 +93,38 @@ als **eigene Platine**, weil ich endlich mal ein eigenes PCB designen will.
 
 ---
 
+## 2026-10-12 – Gehäuse und Ständer
+
+**Zeit:** _bitte eintragen_
+
+### Was ich gemacht habe
+- Gehäuse fürs Herz designt, mit **CadQuery** (CAD in Python), Export als **STEP für Fusion 360** und STL zum Drucken:
+  - **Rückschale** mit 3 Abstandshaltern für die Platine, Schlitz für die USB-C-Buchse,
+    Fenster für das XIAO-USB-Kabel, Loch für den Tasterstößel und 2 Schlüssellöchern zum Aufhängen
+  - **Pixel-Gitter**: 16-mm-Raster, damit jede LED ein eigenes Quadrat beleuchtet
+  - **Diffusor** (1 mm) für gleichmäßiges Licht
+  - **Tasterstößel**, weil der Taster hinten auf der Platine sitzt
+  - **Ständer** mit 90°-V-Tasche: Die Herzspitze hat genau 90°, also passt sie perfekt rein
+- Automatische **Kollisionsprüfung**: Platine, XIAO, Elko, Taster und USB-Buchse als Platzhalter-Blöcke,
+  das Skript prüft, dass kein Gehäuseteil sie schneidet.
+- Die Platine aus KiCad als STEP exportiert und ins Zusammenbau-Modell gesetzt.
+
+### Probleme / Lösungen
+- Erstes Gitter war massiv mit nur 46 Löchern, 79 cm³ Material (teuer beim Druckdienst).
+  → Durchgehendes Raster mit Rand: 47 cm³.
+- Der Herzumriss bestand aus 240 kleinen Geraden → riesige STEP-Dateien, in Fusion lauter Facetten.
+  → Umriss aus echten Kreisbögen: Dateien bis zu 40× kleiner, glatte Flächen.
+- Die USB-C-Buchse steht 1,1 mm über den Platinenrand. Beim Einlegen würde sie an der Wand hängen bleiben.
+  → Der Schlitz in der Wand ist nach oben offen.
+
+![Explosionszeichnung](docs/case_exploded.png)
+
+### Nächste Schritte
+- [ ] Teile in Fusion 360 anschauen
+- [ ] Bei einem Druckdienst Preise vergleichen und bestellen
+
+---
+
 ## Vorlage für neue Einträge
 
 ```
