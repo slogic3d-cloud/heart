@@ -7,7 +7,7 @@ Kostenaufstellung mit aktuellen Preisen erzeugen:
 
 - Bauteilpreise: live von LCSC (dieselben Teile, die JLCPCB bestückt)
 - Wechselkurs USD -> EUR: live von open.er-api.com
-- Filament: aus PrusaSlicer (Einstellungen in cad/slicer_pla.ini)
+- Filament: geslict mit den Profilen für den Anycubic Kobra 2 Neo (cad/slicer_kobra2neo.ini)
 - alles andere: feste Richtwerte, unten in FIXED – bitte bei Bedarf anpassen
 
 Schreibt KOSTEN.md ins Hauptverzeichnis.
@@ -36,10 +36,12 @@ JLC = {"setup": 8.18, "stencil": 1.53, "per_joint": 0.0016, "extended": 3.07, "h
 PCB_5PCS_USD_ESTIMATE = 20.0
 SHIPPING_USD_ESTIMATE = 15.0
 
-# Filament (PrusaSlicer, 0,2 mm, 3 Wände, 15 % Gyroid, Dichte 1,24 g/cm³)
-FILAMENT_G = {"Rückschale": 94.46, "Pixel-Gitter": 57.77, "Diffusor": 21.04,
-              "Ständer": 46.47, "Tasterstößel": 0.62}
-PRINT_HOURS = 9.16 + 6.56 + 3.01 + 3.70 + 0.16
+# Filament: Anycubic Kobra 2 Neo, "0.20mm Standard" + "Anycubic PLA" (cad/slicer_kobra2neo.ini)
+FILAMENT_G = {"Rückschale": 88.55, "Pixel-Gitter": 57.88, "Diffusor": 21.89,
+              "Ständer": 40.88, "Tasterstößel": 0.65}
+PRINT_TIME = {"Rückschale": "3 h 43 min", "Pixel-Gitter": "3 h 55 min", "Diffusor": "51 min",
+              "Ständer": "1 h 35 min", "Tasterstößel": "9 min"}
+PRINT_HOURS = 3.71 + 3.92 + 0.86 + 1.58 + 0.15
 FILAMENT_EUR_PER_KG = 15.99   # Anycubic PLA+ 1 kg rot (Preisvergleich, Okt. 2026)
 FILAMENT_WASTE = 0.15         # Reserve für Fehldrucke/Reinigen
 
@@ -122,15 +124,18 @@ def main():
          f"**{eur(pcb_total_eur + fixed_eur + rolls * FILAMENT_EUR_PER_KG)}** |", "",
          f"Pro Herz gerechnet (Platinenkosten durch {n} geteilt): "
          f"ca. **{eur(pcb_total_eur / n + fixed_eur + fil_eur_used)}**.", "",
-         "## Filament: Anycubic PLA+ rot", "",
-         "| Teil | Verbrauch |", "|---|---|"]
-    L += [f"| {k} | {v:.0f} g |" for k, v in FILAMENT_G.items()]
-    L += [f"| **Summe** | **{fil_g:.0f} g** |",
+         "## Filament: Anycubic PLA+ rot, gedruckt auf dem Anycubic Kobra 2 Neo", "",
+         "| Teil | Verbrauch | Druckzeit |", "|---|---|---|"]
+    L += [f"| {k} | {v:.0f} g | {PRINT_TIME[k]} |" for k, v in FILAMENT_G.items()]
+    L += [f"| **Summe** | **{fil_g:.0f} g** | **ca. {PRINT_HOURS:.0f} h** |",
           f"| + {int(FILAMENT_WASTE * 100)} % Reserve (Fehldrucke, Reinigen) | {fil_need:.0f} g |", "",
           f"**→ {rolls} Rolle (1 kg) reicht** – danach bleiben ca. {rolls * 1000 - fil_need:.0f} g übrig.",
-          f"Druckzeit insgesamt ca. {PRINT_HOURS:.0f} h (PrusaSlicer-Schätzung, je nach Drucker anders).", "",
-          "Werte aus PrusaSlicer mit `cad/slicer_pla.ini` (0,2 mm Schicht, 3 Wände, 15 % Gyroid, "
-          "Dichte 1,24 g/cm³). Tipp: Gitter in **Schwarz** und Diffusor in **Weiß** sehen besser aus – "
+          "",
+          "Geslict mit den offiziellen Anycubic-Profilen für den **Kobra 2 Neo** (0,4-mm-Düse, "
+          "„0.20mm Standard“: 2 Wände, 3 Schichten oben/unten, 15 % Füllung, 5-mm-Rand; Filament "
+          "„Anycubic PLA“, Dichte 1,24 g/cm³). Die Profile stammen aus OrcaSlicer, auf dem der Anycubic Slicer Next "
+          "basiert, und sind in `cad/slicer_kobra2neo.ini` für PrusaSlicer übersetzt. Im Anycubic Slicer selbst "
+          "können Gramm und Zeit leicht abweichen. Alle Teile passen auf das 220 × 220-mm-Bett. Tipp: Gitter in **Schwarz** und Diffusor in **Weiß** sehen besser aus – "
           f"dann brauchst du rot nur {FILAMENT_G['Rückschale'] + FILAMENT_G['Ständer'] + FILAMENT_G['Tasterstößel']:.0f} g.", "",
           f"## JLCPCB: Bauteile (live von LCSC, für {n} Platinen)", "",
           "| Teil | LCSC | pro Platine | Menge | Stückpreis | Summe | Lager | Typ |",

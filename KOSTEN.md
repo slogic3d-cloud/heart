@@ -1,6 +1,6 @@
 # Kosten – LED-Herz
 
-Stand: **12.10.2026 13:07** · Wechselkurs: 1 $ = 0.8926 € (Mon, 12 Oct 2026 00:02:32 +0000)  
+Stand: **12.10.2026 13:15** · Wechselkurs: 1 $ = 0.8926 € (Mon, 12 Oct 2026 00:02:32 +0000)  
 Erzeugt mit `python3 tools/kosten.py --boards 2`. Bauteilpreise und Kurs sind live abgefragt, Werte mit *Schätzung* bitte selbst prüfen.
 
 ## Zusammenfassung
@@ -9,37 +9,36 @@ Erzeugt mit `python3 tools/kosten.py --boards 2`. Bauteilpreise und Kurs sind li
 |---|---|
 | Platinen von JLCPCB (2 bestückt, 5 gefertigt, inkl. Versand) | **63,77 €** |
 | Selbst zu kaufen (XIAO, Leisten, Taster, Elko, Schrauben, Netzteil) – pro Herz | **17,70 €** |
-| Filament (verbrauchte Menge) | **3,52 €** |
+| Filament (verbrauchte Menge) | **3,36 €** |
 | Filament (zu kaufen: 1 Rolle à 1 kg) | 15,99 € |
 | **Ein fertiges Herz, alles zusammen** (Platinen-Bestellung + Teile + 1 Rolle Filament) | **97,46 €** |
 
-Pro Herz gerechnet (Platinenkosten durch 2 geteilt): ca. **53,11 €**.
+Pro Herz gerechnet (Platinenkosten durch 2 geteilt): ca. **52,94 €**.
 
-## Filament: Anycubic PLA+ rot
+## Filament: Anycubic PLA+ rot, gedruckt auf dem Anycubic Kobra 2 Neo
 
-| Teil | Verbrauch |
-|---|---|
-| Rückschale | 94 g |
-| Pixel-Gitter | 58 g |
-| Diffusor | 21 g |
-| Ständer | 46 g |
-| Tasterstößel | 1 g |
-| **Summe** | **220 g** |
-| + 15 % Reserve (Fehldrucke, Reinigen) | 253 g |
+| Teil | Verbrauch | Druckzeit |
+|---|---|---|
+| Rückschale | 89 g | 3 h 43 min |
+| Pixel-Gitter | 58 g | 3 h 55 min |
+| Diffusor | 22 g | 51 min |
+| Ständer | 41 g | 1 h 35 min |
+| Tasterstößel | 1 g | 9 min |
+| **Summe** | **210 g** | **ca. 10 h** |
+| + 15 % Reserve (Fehldrucke, Reinigen) | 241 g |
 
-**→ 1 Rolle (1 kg) reicht** – danach bleiben ca. 747 g übrig.
-Druckzeit insgesamt ca. 23 h (PrusaSlicer-Schätzung, je nach Drucker anders).
+**→ 1 Rolle (1 kg) reicht** – danach bleiben ca. 759 g übrig.
 
-Werte aus PrusaSlicer mit `cad/slicer_pla.ini` (0,2 mm Schicht, 3 Wände, 15 % Gyroid, Dichte 1,24 g/cm³). Tipp: Gitter in **Schwarz** und Diffusor in **Weiß** sehen besser aus – dann brauchst du rot nur 142 g.
+Geslict mit den offiziellen Anycubic-Profilen für den **Kobra 2 Neo** (0,4-mm-Düse, „0.20mm Standard“: 2 Wände, 3 Schichten oben/unten, 15 % Füllung, 5-mm-Rand; Filament „Anycubic PLA“, Dichte 1,24 g/cm³). Die Profile stammen aus OrcaSlicer, auf dem der Anycubic Slicer Next basiert, und sind in `cad/slicer_kobra2neo.ini` für PrusaSlicer übersetzt. Im Anycubic Slicer selbst können Gramm und Zeit leicht abweichen. Alle Teile passen auf das 220 × 220-mm-Bett. Tipp: Gitter in **Schwarz** und Diffusor in **Weiß** sehen besser aus – dann brauchst du rot nur 130 g.
 
 ## JLCPCB: Bauteile (live von LCSC, für 2 Platinen)
 
 | Teil | LCSC | pro Platine | Menge | Stückpreis | Summe | Lager | Typ |
 |---|---|---|---|---|---|---|---|
-| 100nF 50V X7R 0603 | C14663 | 47 | 94 | 0,0142 $ | 1,33 $ | 100 | Basic |
+| 100nF 50V X7R 0603 | C14663 | 47 | 94 | 0,0142 $ | 1,33 $ | 200 | Basic |
 | 10uF 25V X5R 0805 | C15850 | 1 | 2 | 0,0695 $ | 0,14 $ | 0 | Basic |
 | 330R 1% 0603 | C23138 | 1 | 2 | 0,0026 $ | 0,01 $ | 764.500 | Basic |
-| 5.1k 1% 0603 | C23186 | 2 | 4 | 0,0015 $ | 0,01 $ | 19.278.100 | Basic |
+| 5.1k 1% 0603 | C23186 | 2 | 4 | 0,0015 $ | 0,01 $ | 19.278.000 | Basic |
 | SN74AHCT1G125DBVR | C7484 | 1 | 2 | 0,1009 $ | 0,20 $ | 26.835 | Extended |
 | SS34 Schottky 40V 3A SMA | C408258 | 1 | 2 | 0,0402 $ | 0,08 $ | 72.900 | Extended |
 | HRO TYPE-C-31-M-12 | C165948 | 1 | 2 | 0,1879 $ | 0,38 $ | 378.915 | Extended |
